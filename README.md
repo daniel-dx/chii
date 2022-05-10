@@ -58,3 +58,48 @@ Then browse to localhost:8080 to start debugging your page.
 
 * [whistle.chii](https://github.com/liriliri/whistle.chii): Whistle Chii plugin.
 * [chobitsu](https://github.com/liriliri/chobitsu): Chrome devtools protocol JavaScript implementation.
+
+## 搭建本地环境
+
+1. 拉取 Chrome DevTools frontend 最新代码
+```sh
+$ npm run init:front_end
+```
+
+2. 构建 Chrome DevTools frontend 并复制到 public 目录
+```sh
+$ npm run dev:front_end
+```
+
+3. 启动调试服务
+```
+$ node bin/chii.js start -p 8080
+```
+访问 [http://localhost:8080/](http://localhost:8080/)
+
+### 遇到的问题及解决方法
+
+- 没有 autoninja 命令
+
+```sh
+$ git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+```
+
+在 ~/.bash_profile 加入 `export PATH=$PATH:/path/to/depot_tools`
+```sh
+$ source ~/.bash_profile
+```
+
+- 遇到 `unable to get local issuer certificate` 异常
+
+给 `devtools/devtools-frontend/scripts/deps/download_emscripten.py` 增加代码忽略 ssl 校验
+```python
+import ssl 
+ssl._create_default_https_context = ssl._create_unverified_context
+```
+
+然后运行
+
+```sh
+$ npm run init:front_end_try
+```
